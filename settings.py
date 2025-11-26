@@ -38,8 +38,8 @@ class Settings:
         
         #Alien Settings
         self.alien_file = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
-        self.alien_w = 80
-        self.alien_h = 80
+        self.alien_w = 40
+        self.alien_h = 40
 
         #Sprinter File
         self.sprinter_file = Path.cwd() / 'Assets' / 'images' / 'Asteroid Brown.png'
@@ -70,6 +70,7 @@ class Settings:
 
         #Ship Settings
         self.ship_speed = 5
+        self.ship_speed_vertical = 5
         self.ship_lives = 3
         
         #Weapon Settings

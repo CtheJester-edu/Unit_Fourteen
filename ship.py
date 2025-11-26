@@ -79,7 +79,7 @@ class Ship:
         self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
 
-    def fire(self):
+    def fire_main_gun(self):
 
         """Fires the Main Gun"""
 
@@ -100,7 +100,7 @@ class Ship:
     def check_collisions(self, other_group):
 
         """Checks collision with whatever sprite group is fed into it"""
-        
+
         if pygame.sprite.spritecollideany(self, other_group):
             self._center_ship()
             return True

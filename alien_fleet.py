@@ -57,8 +57,6 @@ class AlienFleet:
                 current_y = alien_h + y_offset
                 if col % 2 == 0:
                     continue
-                
-               
                 self._create_sprinter(current_x, current_y)
 
 
@@ -116,7 +114,7 @@ class AlienFleet:
         new_alien = Alien(self, current_x, current_y)
         self.fleet.add(new_alien)
 
-    def _create_alien(self, current_x: int, current_y: int):
+    def _create_sprinter(self, current_x: int, current_y: int):
 
         """Creates and new sprinter in the special sprite group at whatever coords it recieces"""
         
@@ -186,14 +184,15 @@ class AlienFleet:
         Checks for each alien if they are touching the bottom of the screen.
         If they are they are sent to the top of the screen.
         """
-        
+
         alien: 'Alien'
+        special: 'Sprinter'
         for alien in self.fleet:
             if alien.rect.bottom >= self.settings.screen_h:
-                alien.y = 0
-        for alien in self.special:
-            if alien.rect.bottom >= self.settings.screen_h:
-                alien.y - 0
+                alien.rect.y = 0
+        for special in self.special:
+            if special.rect.bottom >= self.settings.screen_h:
+                special.rect.y - 0
         
     
     def check_alien_count(self):

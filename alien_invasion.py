@@ -3,7 +3,6 @@ import pygame
 from settings import Settings
 from ship import Ship
 from arsenal import Arsenal
-#from alien import Alien
 from alien_fleet import AlienFleet
 from game_stats import GameStats
 from time import sleep
@@ -51,7 +50,7 @@ class AlienInvasion:
 
         #Initializes the ship, fleet, and button
         self.ship = Ship(self, Arsenal(self))
-        self.alien_fleet =AlienFleet(self)
+        self.alien_fleet = AlienFleet(self)
         self.play_button = Button(self, "Play")
         self.game_active = False
 
@@ -88,35 +87,20 @@ class AlienInvasion:
         """
 
         #check collisions for ship
-        if self.ship.check_collisions(self.alien_fleet.fleet):
+        if self.ship.check_collisions(self.alien_fleet.fleet) or self.ship.check_collisions(self.alien_fleet.special):
             self.check_game_status()
 
         #check collisions for aliens and screen bottom
         self.alien_fleet.check_fleet_bottom()
         
         #check collisions for bullets and aliens
-        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.main_gun)
-        collisions = self.alien_fleet.check_special_cannon_collisions(self.ship.arsenal.main_gun)
-        if collisions:
-            self.game_stats.update(collisions)
-            self.HUD.update_scores()
-            self.impact.play()
-            self.impact.fadeout(150)
-
-        #check collisions for rounds and aliens
-        collisions_cannon1 = self.alien_fleet.check_round_collisions(self.ship.arsenal.cannon1)
-        collisions_cannon2 = self.alien_fleet.check_round_collisions(self.ship.arsenal.cannon2)
-        collisions_cannon1 = self.alien_fleet.check_special_round_collisions(self.ship.arsenal.cannon1)
-        collisions_cannon2 = self.alien_fleet.check_special_round_collisions(self.ship.arsenal.cannon2)
-        if collisions_cannon1:
-            self.impact.play()
-            self.impact.fadeout(150)
-            self.HUD.update_scores()
-        if collisions_cannon2:
-            self.impact.play()
-            self.impact.fadeout(150)
-            self.HUD.update_scores()
+        self.basic_cannon_collision()
+        self.special_cannon_collision()
         
+        #check collisions for rounds and aliens
+        self.basic_round_collision()
+        self.special_round_collision()
+
         #check if aliens are gone
         if self.alien_fleet.check_alien_count() and self.alien_fleet.check_special_count():
             self._reset_level()
@@ -127,6 +111,63 @@ class AlienInvasion:
             #update game hud veiw
 
         pass
+
+    def special_round_collision(self):
+
+        """Checks Collision for secondary gun shots and the special alien fleet"""
+
+        collisions_cannon1 = self.alien_fleet.check_special_round_collisions(self.ship.arsenal.cannon1)
+        collisions_cannon2 = self.alien_fleet.check_special_round_collisions(self.ship.arsenal.cannon2)
+        if collisions_cannon1:
+            self.game_stats.update(collisions_cannon1, self.settings.sprinter_points)
+            self.impact.play()
+            self.impact.fadeout(150)
+            self.HUD.update_scores()
+        if collisions_cannon2:
+            self.game_stats.update(collisions_cannon2, self.settings.sprinter_points)
+            self.impact.play()
+            self.impact.fadeout(150)
+            self.HUD.update_scores()
+
+    def basic_round_collision(self):
+
+        """Checks Collision for secondary gun shots and the alien fleet"""
+
+        collisions_cannon1 = self.alien_fleet.check_round_collisions(self.ship.arsenal.cannon1)
+        collisions_cannon2 = self.alien_fleet.check_round_collisions(self.ship.arsenal.cannon2)
+        
+        if collisions_cannon1:
+            self.game_stats.update(collisions_cannon1, self.settings.alien_points)
+            self.impact.play()
+            self.impact.fadeout(150)
+            self.HUD.update_scores()
+        if collisions_cannon2:
+            self.game_stats.update(collisions_cannon2, self.settings.alien_points)
+            self.impact.play()
+            self.impact.fadeout(150)
+            self.HUD.update_scores()
+
+    def special_cannon_collision(self):
+
+        """Checks Collision for main gun shots and the special alien fleet"""
+
+        collisions = self.alien_fleet.check_special_cannon_collisions(self.ship.arsenal.main_gun)
+        if collisions:
+            self.game_stats.update(collisions, self.settings.sprinter_points)
+            self.HUD.update_scores()
+            self.impact.play()
+            self.impact.fadeout(150)
+
+    def basic_cannon_collision(self):
+
+        """Checks Collision for main gun shots and the alien fleet"""
+
+        collisions = self.alien_fleet.check_cannon_collisions(self.ship.arsenal.main_gun)       
+        if collisions:
+            self.game_stats.update(collisions, self.settings.alien_points)
+            self.HUD.update_scores()
+            self.impact.play()
+            self.impact.fadeout(150)
 
     def check_game_status(self):
 
@@ -245,7 +286,7 @@ class AlienInvasion:
     def _check_keyup_events(self, event):
 
         """Checks for all keyup events"""
-        
+
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
