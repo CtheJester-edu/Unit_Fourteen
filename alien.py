@@ -7,7 +7,12 @@ if TYPE_CHECKING:
 
 class Alien(Sprite):
 
+    """Runs all functions that need to be run for each individual alien"""
+
     def __init__(self, fleet:'AlienFleet', x: float, y: float):
+        
+        """Establishes all needed variables and the Initial position for the alien"""
+
         super().__init__()
 
         self.screen = fleet.game.screen
@@ -28,17 +33,21 @@ class Alien(Sprite):
 
     def update(self):
         
-        #if self.check_edges():
-            #self.settings.fleet_direction *= (-1)
-            #self.y += self.settings.fleet_drop_speed
+        """Updates the position of the alien"""
         
         self.x += (self.settings.fleet_speed * self.fleet.fleet_direction)
         self.rect.x = self.x
         self.rect.y = self.y
 
     def check_edges(self):
+
+        """Checks if this alien is touching the sides of the screen"""
+
         return (self.rect.right >= self.boundaries.right or self.rect.left <= self.boundaries.left)
 
 
     def draw_alien(self):
+
+        """Redraws this alien at its new location"""
+        
         self.screen.blit(self.image, self.rect)
