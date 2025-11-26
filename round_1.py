@@ -8,7 +8,12 @@ if TYPE_CHECKING:
 
 class Round1(Sprite):
 
+    """Keeps track of round specific functions"""
+
     def __init__(self, game:'AlienInvasion'):
+
+        """Initializes the art and all needed variables"""
+
         super().__init__()
 
         self.screen = game.screen
@@ -18,19 +23,20 @@ class Round1(Sprite):
         self.image = pygame.transform.scale(self.image, (self.settings.round_w, self.settings.round_h))
 
         self.rect = self.image.get_rect()
-        
-        #trying something
-        #self.side = random.choic(['left', 'right'])
-        #self.rect.midtop = game.ship.rect.(self.side)
-        #self.rect.midtop = game.ship.rect.midtop
 
         self.rect.midtop = game.ship.rect.topleft
 
         self.y = float(self.rect.y)
 
     def update(self):
+
+        """Moves the round up the screen"""
+
         self.y -= self.settings.round_speed
         self.rect.y = self.y
 
     def draw_round(self):
+
+        """Updates the round to its new position"""
+
         self.screen.blit(self.image, self.rect)
