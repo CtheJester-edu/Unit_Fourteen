@@ -148,6 +148,8 @@ class AlienFleet:
         self.special.update()
 
     def draw_fleet(self):
+
+        """"Draws all aliens in the fleet and special fleet"""
         alien: 'Alien'
         for alien in self.fleet:
             alien.draw_alien()
@@ -178,12 +180,12 @@ class AlienFleet:
 
         return pygame.sprite.groupcollide(self.special, other_group, True, False)
     
-    def check_fleet_bottom(self):
+    """def check_fleet_bottom(self):
 
-        """
+    
         Checks for each alien if they are touching the bottom of the screen.
         If they are they are sent to the top of the screen.
-        """
+
 
         alien: 'Alien'
         special: 'Sprinter'
@@ -192,7 +194,19 @@ class AlienFleet:
                 alien.rect.y = 0
         for special in self.special:
             if special.rect.bottom >= self.settings.screen_h:
-                special.rect.y - 0
+                special.rect.y - 0"""
+
+    def check_fleet_bottom(self):
+
+        """Checks if any aliens in either of the sprite groups are touching the bottom of the screen"""
+
+        alien: 'Alien'
+        for alien in self.fleet:
+            if alien.rect.bottom >= self.settings.screen_h:
+                alien.y = 0
+        for alien in self.special:
+            if alien.rect.bottom >= self.settings.screen_h:
+                alien.y = 0
         
     
     def check_alien_count(self):
